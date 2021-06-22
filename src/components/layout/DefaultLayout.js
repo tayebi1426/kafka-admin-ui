@@ -11,7 +11,7 @@ function DefaultLayout({mainRoutes}) {
         <Header/>
         <div className={classnames(classes.content)}>
             <div className={classes.fakeToolbar}/>
-            <Container maxWidth="lg">
+            <Container maxWidth="xl">
                 <Grid container spacing={4}>
                     <Grid item lg={12} md={12} sm={12} xs={12}>
                         <SwitchRouter routes={mainRoutes}/>

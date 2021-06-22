@@ -1,49 +1,135 @@
-import React from 'react';
-import {Typography} from "@material-ui/core";
-import {DataGrid} from '@material-ui/data-grid';
+import React,{useEffect, useState} from 'react';
+import {DataTable} from 'primereact/datatable';
+import {Column} from 'primereact/column';
+import {Button} from 'primereact/button';
+import {MultiSelect} from 'primereact/multiselect';
+import {Dropdown} from 'primereact/dropdown';
+import {InputText} from 'primereact/inputtext';
+import {Card, CardActionArea, CardContent, Grid, Toolbar} from "@material-ui/core";
+import KafkaClientService from '../services/KafkaClientService'
 
-const KAFKA_CLIENT_COLUMNS = [
-    { field: 'id', headerName: 'ID', width: 90 },
-    { field: 'firstName', headerName: 'First name', width: 150 },
-    { field: 'lastName', headerName: 'Last name', width: 150 },
-    {
-        field: 'age',
-        headerName: 'Age',
-        type: 'number',
-        width: 110,
-    },
-    {
-        field: 'fullName',
-        headerName: 'Full name',
-        description: 'This column has a value getter and is not sortable.',
-        sortable: false,
-        width: 160,
-        valueGetter: (params) =>
-            `${params.getValue(params.id, 'firstName') || ''} ${
-                params.getValue(params.id, 'lastName') || ''
-            }`,
-    },
-];
 
-const rows = [
-    { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-    { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-    { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-    { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-    { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-    { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-    { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-    { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-    { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-];
+import 'primereact/resources/themes/saga-blue/theme.css'
+import 'primereact/resources/primereact.min.css'
+import 'primeicons/primeicons.css'
 
-class KafkaClientList extends React.Component {
 
-    render() {
-        return <div style={{ height: 400, width: '100%' }}>
-            <DataGrid columns={KAFKA_CLIENT_COLUMNS}  rows={rows} pageSize={5} checkboxSelection/>
-        </div>
+const KAFKA_RESOURCE_TYPE = [
+    {label: 'TOPIC', value: 'TOPIC'},
+    {label: 'GROUP', value: 'GROUP'},
+    {label: 'TRANSACTION', value: 'TRANSACTIONAL_ID'},
+    {label: 'CLUSTER', value: 'CLUSTER'}
+]
+const KAFKA_PATTERN_TYPE = ['PREFIXED', 'LITERAL']
+
+function KafkaClientList(props) {
+    let {history} = props;
+    console.log('props > ', props)
+    let dataTableRef;
+    const [rowData, setRowData] = useState([]);
+    const [selectedResourceType, setSelectedResourceType] = useState();
+    const [selectedPatternType, setSelectedPatternType] = useState();
+    const [globalFilter, setGlobalFilter] = useState();
+    useEffect(() => {
+        KafkaClientService.getAclList().then(data => {
+            data.forEach((item, index) => {
+                item.id = index
+            })
+            setRowData(data)
+        })
+    }, [])
+    let actionBodyTemplate = () => {
+        return (
+            <Button type="button" icon="pi pi-cog" className="p-button-secondary"/>
+        );
+    };
+    let changeResourceTypeFilter = (opt) => {
+        console.log('selectedResource ', opt)
+        setSelectedResourceType(opt)
+        dataTableRef.filter(opt, 'resourceType', 'in')
     }
+    const restDataTableFilter = () => {
+        setSelectedResourceType(null)
+        setSelectedPatternType(null)
+        setGlobalFilter(null)
+        dataTableRef.reset();
+    }
+    const header = (
+        <div className="table-header">
+            <Grid container>
+                <Grid item={true} lg={2} >
+                    <Button type="button" label="Clear" className="p-button-outlined" icon="pi pi-filter-slash"
+                            onClick={restDataTableFilter}/>
+                </Grid>
+                <Grid item={true} lg={10}>
+                    <div className="p-input-icon-left">
+                        <i className="pi pi-search"/>
+                        <InputText type="search" value={globalFilter} onChange={(e) => setGlobalFilter(e.target.value)}
+                                   placeholder="Global Search"/>
+                    </div>
+                </Grid>
+            </Grid>
+        </div>
+    );
+    const resourceTypeFilter = <MultiSelect value={selectedResourceType}
+                                            options={KAFKA_RESOURCE_TYPE}
+                                            onChange={e => changeResourceTypeFilter(e.value)}
+                                            optionLabel="label"
+                                            optionValue="value"
+                                            placeholder="All"
+                                            className="p-column-filter"/>;
+    const patternTypeFilter = <Dropdown options={KAFKA_PATTERN_TYPE}
+                                        value={selectedPatternType}
+                                        onChange={e => {
+                                            dataTableRef.filter(e.value, 'patternType', 'equals')
+                                            setSelectedPatternType(e.value)
+                                        }}
+                                        placeholder="Select a Pattern"
+                                        className="p-column-filter"
+                                        showClear/>;
+
+    return <Card className="root">
+        <CardActionArea>
+            <Toolbar >
+                <Button label="Add Acl" onClick={(e) => {
+                    history.push("/clients/addAcl")
+                }}/>
+            </Toolbar>
+        </CardActionArea>
+<CardContent>
+        <DataTable
+            value={rowData}
+            ref={(el) => dataTableRef = el}
+            rows={10}
+            header={header}
+            globalFilter={globalFilter}
+            emptyMessage="No customers found"
+            className="p-datatable-customers"
+            dataKey="id"
+            paginator={true}
+            rowHover={true}
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+            rowsPerPageOptions={[10, 25, 50]}>
+            <Column field='principal' header='principal' width={300} filter={true} sortable
+                    filterMatchMode="contains"
+                    filterPlaceholder="Search by username"/>
+            <Column field='resourceType' header='resourceType' width={300} filter={true}
+                    filterElement={resourceTypeFilter} filterPlaceholder="Choose resourceTypes"/>
+            <Column field='patternType' header='patternType' width={300} filter={true}
+                    filterElement={patternTypeFilter}/>
+            <Column field='operations' header='operations' body={({operations}) => {
+
+                return <div>
+                    {operations.reduce((i1, i2) => i1 + ", " + i2)}
+                </div>;
+
+            }} width={500} filter={true}/>
+            <Column body={actionBodyTemplate} headerStyle={{width: '8em', textAlign: 'center'}}
+                    bodyStyle={{textAlign: 'center', overflow: 'visible'}}/>
+        </DataTable>
+</CardContent>
+    </Card>
 }
 
 export default KafkaClientList

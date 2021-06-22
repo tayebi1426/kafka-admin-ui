@@ -2,10 +2,12 @@ import React from 'react'
 import DefaultLayout from "../components/layout/DefaultLayout";
 
 let kafkaClientList = React.lazy(() => import("../pages/KafkaClientList"));
+let AddAclEntry = React.lazy(() => import("../pages/AddAclEntry"));
 //
 
 const MAIN_ROUTES = [
-    {path:'/clients',component:kafkaClientList}
+    {path: '/clients/AddAcl', component: AddAclEntry},
+    {path: '/clients',exact:true, component: kafkaClientList}
 ];
 
 const Layout = (props) => <DefaultLayout {...props} mainRoutes={MAIN_ROUTES}/>;
