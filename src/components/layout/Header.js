@@ -21,7 +21,7 @@ import {
     ArrowBack as ArrowBackIcon,
 } from "@material-ui/icons";
 import classNames from "classnames";
-
+import SecurityService from '../../services/SecurityService'
 // styles
 import useStyles from "./styles";
 
@@ -34,7 +34,7 @@ import useStyles from "./styles";
 } from "../../context/LayoutContext";*/
 //import { useUserDispatch, signOut } from "../../context/UserContext";
 
-export default function Header(props) {
+export default function Header({history}) {
     let classes = useStyles();
 
     // local
@@ -137,7 +137,10 @@ export default function Header(props) {
                         <AccountIcon className={classes.profileMenuIcon}/> Profile
                     </MenuItem>
 
-                    <div className={classes.profileMenuUser}>
+                    <div className={classes.profileMenuUser} onClick={event => {
+                        SecurityService.logout();
+                        history.push("/login")
+                    }}>
                         <Typography
                             className={classes.profileMenuLink}
                             color="primary">

@@ -1,14 +1,14 @@
 import React from 'react';
 import {Redirect, Route} from 'react-router-dom';
 import PropTypes from 'prop-types';
-import SecurityService from '../../service/SecurityService'
+import SecurityService from '../services/SecurityService'
 
 function SecureRoute(props) {
     let {authorities, ...restProps} = props;
 
     if (authorities && authorities.length > 0) {
-        let user = SecurityService.getCurrentUser();
-        if (!user) {
+
+        if (!SecurityService.isAuthenticated()) {
             return <Redirect to="/login"/>;
         }
         if (!SecurityService.hasAuthority(authorities)) {

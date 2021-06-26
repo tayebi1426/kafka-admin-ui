@@ -8,7 +8,7 @@ let AddAclEntry = React.lazy(() => import("../pages/AddAclEntry"));
 
 const MAIN_ROUTES = [
     {path: '/acl/add', component: AddAclEntry},
-    {path: '/acl',exact:true, component: kafkaClientList}
+    {path: '/acl',exact:true, component: kafkaClientList,authorities:['ADMIN']}
 ];
 
 const Layout = (props) => <DefaultLayout {...props} mainRoutes={MAIN_ROUTES}/>;

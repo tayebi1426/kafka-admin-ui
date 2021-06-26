@@ -5,15 +5,15 @@ import classnames from 'classnames';
 import Header from "./Header";
 import useStyles from "./styles";
 
-function DefaultLayout({mainRoutes}) {
+function DefaultLayout({mainRoutes,history}) {
     let classes = useStyles();
     return <div className={classes.root}>
-        <Header/>
+        <Header history={history}/>
         <div className={classnames(classes.content)}>
             <div className={classes.fakeToolbar}/>
-            <Container maxWidth="xl">
+            <Container component="main" maxWidth="xl">
                 <Grid container spacing={4}>
-                    <Grid item lg={12} md={12} sm={12} xs={12}>
+                    <Grid item xs={12}>
                         <SwitchRouter routes={mainRoutes}/>
                     </Grid>
                 </Grid>

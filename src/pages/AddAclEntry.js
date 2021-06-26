@@ -92,6 +92,7 @@ function AddAclEntry({history}) {
                                 <TextField name="principal"
                                            select={true}
                                            required={true}
+                                           id="principal"
                                            label="principal"
                                            variant="outlined"
                                            fullWidth={true}
@@ -107,7 +108,7 @@ function AddAclEntry({history}) {
                             </Grid>
 
                             <Grid item={true} xs={12}>
-                                <TextField name="patternType"
+                                <TextField id="patternType"
                                            select={true} label="Pattern Type" required={true}
                                            variant="outlined"
                                            fullWidth={true}
@@ -119,7 +120,7 @@ function AddAclEntry({history}) {
                             </Grid>
 
                             <Grid item={true} xs={12}>
-                                <TextField name='topicName' label='Topic Name' variant="outlined"
+                                <TextField id='topicName' label='Topic Name' variant="outlined"
                                            fullWidth={true}
                                            value={formik.values.topicName}
                                            onChange={formik.handleChange}
@@ -172,7 +173,7 @@ function AddProducerAcl({formik}) {
         {
             formik.values.hasTransaction &&
             <Grid item={true} xs={12}>
-                <TextField name='transactionIdPrefix' label='transactionId Prefix' variant="outlined"
+                <TextField id='transactionIdPrefix' label='transactionId Prefix' variant="outlined"
                            fullWidth={true}
                            value={formik.values.transactionIdPrefix}
                            onChange={formik.handleChange}
