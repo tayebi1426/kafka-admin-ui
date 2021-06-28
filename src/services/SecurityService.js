@@ -12,11 +12,8 @@ class SecurityService {
         return fetch(`${serverUrl}/user`, {
             method: 'GET',
             headers: {
-                Authorization: `Basic ${token}`,
+                Authorization: `Basic ${token}`
             }
-        }).then(response => response.json()).then(res => {
-            SecurityService.setAuthToken(token)
-            return res;
         })
     }
     static isAuthenticated() {

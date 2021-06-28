@@ -1,9 +1,9 @@
 import React from 'react'
 import DefaultLayout from "../components/layout/DefaultLayout";
 
-let SignIn = React.lazy(() => import("../pages/SignIn"));
-let kafkaClientList = React.lazy(() => import("../pages/KafkaAclList"));
-let AddAclEntry = React.lazy(() => import("../pages/AddAclEntry"));
+let SignIn = React.lazy(() => import("../pages/Login"));
+let kafkaClientList = React.lazy(() => import("../pages/acl/KafkaAclList"));
+let AddAclEntry = React.lazy(() => import("../pages/acl/AddAclEntry"));
 //
 
 const MAIN_ROUTES = [

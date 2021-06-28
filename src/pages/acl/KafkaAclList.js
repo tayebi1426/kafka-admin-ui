@@ -3,11 +3,10 @@ import React, {useEffect, useState} from 'react';
 import {Button, Card, CardContent, Toolbar} from "@material-ui/core";
 
 import AddBoxIcon from '@material-ui/icons/AddBox';
-import KafkaClientService from '../services/KafkaClientService'
+import KafkaClientService from '../../services/KafkaClientService'
 
-
-import DeleteAclConfirm from "../components/DeleteAclConfirm";
-import KafkaAclDataTable from "../components/KafkaAclDataTable";
+import DeleteAclConfirm from "../../components/DeleteAclConfirm";
+import KafkaAclDataTable from "../../components/KafkaAclDataTable";
 
 function KafkaAclList(props) {
     let {history} = props;
@@ -28,7 +27,7 @@ function KafkaAclList(props) {
         fetchAclList();
     }, [])
 
-    return <Card className="root">
+    return <Card  >
         <DeleteAclConfirm open={showDeleteAclConfirm}
                           handleClose={() => setShowDeleteAclConfirm(false)}
                           handleConfirm={() => {

@@ -5,11 +5,11 @@ import {Button, Grid, IconButton, TextField} from "@material-ui/core";
 import RotateLeftIcon from "@material-ui/icons/RotateLeft";
 import {MultiSelect} from "primereact/multiselect";
 import {Dropdown} from "primereact/dropdown";
+import {DeleteForeverSharp} from "@material-ui/icons";
 
 import 'primereact/resources/themes/saga-blue/theme.css'
 import 'primereact/resources/primereact.min.css'
-import 'primeicons/primeicons.css'
-import {DeleteForeverSharp} from "@material-ui/icons";
+
 
 const KAFKA_RESOURCE_TYPE = [
     {label: 'TOPIC', value: 'TOPIC'},
@@ -26,9 +26,9 @@ function KafkaAclDataTable({rowData, onDeleteAclEntry}) {
     const [globalFilter, setGlobalFilter] = useState('');
 
     let actionBodyTemplate = (rowData) => {
-        return <IconButton size="medium" color="secondary" variant="contained"
-                           onClick={() => onDeleteAclEntry(rowData)}>
-            <DeleteForeverSharp/></IconButton>
+        return <IconButton style={{padding: 0}} onClick={() => onDeleteAclEntry(rowData)}>
+            <DeleteForeverSharp  color="secondary"/>
+        </IconButton>
     }
     let changeResourceTypeFilter = (opt) => {
         setSelectedResourceType(opt)
@@ -81,22 +81,24 @@ function KafkaAclDataTable({rowData, onDeleteAclEntry}) {
                 filterElement={resourceTypeFilter} filterPlaceholder="Choose resourceTypes"/>
         <Column field='patternType' header='patternType' width={300} filter={true}
                 filterElement={patternTypeFilter}/>
-        <Column field='operations' header='operations' body={({operations}) => {
-            return <div>
-                {operations.reduce((i1, i2) => i1 + "; " + i2)}
-            </div>;
-
-        }} width={500} filter={true}/>
+        <Column field='operations' header='operations'
+                width={500} filter={true}
+                body={({operations}) => {
+                    return <div>
+                        {operations.reduce((i1, i2) => i1 + "; " + i2)}
+                    </div>;
+                }}/>
         <Column body={actionBodyTemplate}
-                headerStyle={{width: '8em', textAlign: 'center'}}
-                bodyStyle={{textAlign: 'center', overflow: 'visible'}}/>
+                header="Actions"
+                headerStyle={{width: '6em', textAlign: 'center'}}
+                bodyStyle={{textAlign: 'center'}}/>
 
     </DataTable>
 }
 
 function DataTableHeader({globalFilter, onChangeGlobalFilter, restFilter}) {
     return <div className="table-header">
-        <Grid container spacing={4}>
+        <Grid container spacing={2}>
             <Grid item={true}>
                 <TextField variant="outlined"
                            value={globalFilter}

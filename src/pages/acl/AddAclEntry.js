@@ -16,7 +16,7 @@ import {
 } from '@material-ui/core'
 import {useFormik} from "formik";
 import * as Yup from 'yup';
-import KafkaClientService from '../services/KafkaClientService.js'
+import KafkaClientService from '../../services/KafkaClientService.js'
 import Typography from "@material-ui/core/Typography";
 
 const aclEntryValidationSchema = Yup.object().shape({

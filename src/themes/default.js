@@ -1,4 +1,3 @@
-import {createMuiTheme} from '@material-ui/core/styles';
 import tinycolor from "tinycolor2";
 
 const primary = "#536DFE";
@@ -11,6 +10,10 @@ const lightenRate = 7.5;
 const darkenRate = 15;
 
 const defaultTheme = {
+    typography: {
+        // In Japanese the characters are usually larger.
+        fontSize: 12,
+    },
     palette: {
         primary: {
             main: primary,
