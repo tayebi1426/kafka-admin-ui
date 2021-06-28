@@ -31,8 +31,6 @@ const aclEntryValidationSchema = Yup.object().shape({
         .min(3, 'Too Short!')
         .max(50, 'Too Long!')
         .notRequired()
-
-
 })
 const saveAclEntry = (history, values) => {
     console.log('history >> ', history);

@@ -1,28 +1,32 @@
 import React, {useState} from 'react';
 import {
     Avatar,
-    Button,
-    Grid,
     Box,
-    Typography,
-    Container,
+    Button,
     Checkbox,
+    Container,
     CssBaseline,
     FormControlLabel,
+    Grid,
     IconButton,
     InputAdornment,
     Link,
-    TextField
+    TextField,
+    Typography
 } from "@material-ui/core";
-
+import YUP from "yup"
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import {makeStyles} from '@material-ui/core/styles';
 import {useFormik} from "formik";
 import SecurityService from "../services/SecurityService";
 import {useSnackbar} from 'notistack';
-
 import {Visibility, VisibilityOff} from "@material-ui/icons";
+import * as Yup from "yup";
 
+const loginValidationSchema = Yup.object().shape({
+    username: Yup.string().required(),
+    password: Yup.string().required()
+})
 
 function Copyright() {
     return (
@@ -68,6 +72,7 @@ export default function Login({history}) {
     const {enqueueSnackbar} = useSnackbar();
     const formik = useFormik({
         initialValues: {username: '', password: ''},
+        validationSchema:loginValidationSchema,
         onSubmit: (values, formikHelpers) => {
 
             setLoginErrorMessage(false)
@@ -95,13 +100,13 @@ export default function Login({history}) {
                     <LockOutlinedIcon/>
                 </Avatar>
                 <Typography component="h1" variant="h2">
-                    Sign in
+                    <strong>Sign In</strong>
                 </Typography>
                 <div style={{minHeight: '5em'}}>
                     {loginErrorMessage &&
-                    <h3 style={{color: '#FF5C93'}}>
-                        Sorry, username or password is incorrect!
-                    </h3>
+                    <h2 style={{color: '#FF5C93'}}>
+                        <strong>Sorry, username or password is incorrect!</strong>
+                    </h2>
                     }
                 </div>
                 <form className={classes.form} noValidate>
@@ -117,6 +122,8 @@ export default function Login({history}) {
                         autoFocus
                         value={formik.values.username}
                         onChange={formik.handleChange}
+                        error={formik.touched.username && Boolean(formik.errors.username)}
+                        helperText={formik.touched.username && formik.errors.username}
                     />
                     <TextField
                         variant="outlined"
@@ -125,11 +132,12 @@ export default function Login({history}) {
                         fullWidth
                         name="password"
                         label="Password"
-
                         id="password"
                         autoComplete="current-password"
                         value={formik.values.password}
                         onChange={formik.handleChange}
+                        error={formik.touched.password && Boolean(formik.errors.password)}
+                        helperText={formik.touched.password && formik.errors.password}
                         type={showPassword ? "text" : "password"}
                         InputProps={{ // <-- This is where the toggle button is added.
                             endAdornment: (
