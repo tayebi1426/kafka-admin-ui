@@ -67,7 +67,7 @@ export default function Login({history}) {
 
     const {enqueueSnackbar} = useSnackbar();
     const formik = useFormik({
-        initialValues: {username: 'Admin9', password: 'Admin@123'},
+        initialValues: {username: '', password: ''},
         onSubmit: (values, formikHelpers) => {
 
             setLoginErrorMessage(false)
