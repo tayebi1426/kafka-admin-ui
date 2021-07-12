@@ -107,7 +107,10 @@ function AddAclEntry({history}) {
 
                             <Grid item={true} xs={12}>
                                 <TextField id="patternType"
-                                           select={true} label="Pattern Type" required={true}
+                                           name="patternType"
+                                           select={true}
+                                           label="Pattern Type"
+                                           required={true}
                                            variant="outlined"
                                            fullWidth={true}
                                            value={formik.values.patternType}
@@ -136,7 +139,7 @@ function AddAclEntry({history}) {
                 </Grid>
                 <Toolbar>
                     <Grid container={true} spacing={2}>
-                        <Grid item={true} >
+                        <Grid item={true}>
                             <Button variant="contained" color="primary" type="submit">save</Button>
                         </Grid>
                         <Grid item={true}>
